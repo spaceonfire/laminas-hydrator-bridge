@@ -1,7 +1,7 @@
 {
   "name": "spaceonfire/laminas-hydrator-bridge",
-  "type": "library",
   "description": "Provides integration for Laminas Hydrator with some spaceonfire libraries",
+  "type": "library",
   "keywords": [
     "spaceonfire",
     "laminas",
@@ -19,29 +19,29 @@
     }
   ],
   "require": {
-    "php": "^7.2|^8.0",
+    "php": "^7.4|^8.0",
     "laminas/laminas-hydrator": "^3.0|^4.0"
   },
   "require-dev": {
+    "phpunit/phpunit": "^9.5",
     "roave/security-advisories": "dev-latest",
-    "spaceonfire/type": "^2.5"
+    "spaceonfire/data-source": "^3.0",
+    "spaceonfire/type": "^3.0",
+    "spaceonfire/value-object": "^3.0"
   },
   "suggest": {
-    "spaceonfire/type": "Required to use ScalarStrategy"
+    "spaceonfire/type": "Used with CasterStrategy",
+    "spaceonfire/value-object": "Used with ValueObjectStrategy",
+    "spaceonfire/data-source": "Used with BlameStrategy"
   },
   "autoload": {
     "psr-4": {
-      "spaceonfire\\LaminasHydratorBridge\\": "src"
+      "spaceonfire\\Bridge\\LaminasHydrator\\": "src"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "spaceonfire\\LaminasHydratorBridge\\": "tests"
-    }
-  },
-  "extra": {
-    "branch-alias": {
-      "dev-master": "2.5-dev"
+      "spaceonfire\\Bridge\\LaminasHydrator\\": "tests"
     }
   },
   "config": {

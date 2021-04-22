@@ -2,21 +2,23 @@
 
 declare(strict_types=1);
 
-namespace spaceonfire\LaminasHydratorBridge\Strategy;
+namespace spaceonfire\Bridge\LaminasHydrator\Strategy;
 
 use PHPUnit\Framework\TestCase;
 
 class RefreshStrategyTest extends TestCase
 {
-    public function testExtract(): void
+    public function testDefault(): void
     {
         $strategy = new RefreshStrategy();
-        self::assertNull($strategy->extract('some value', null));
+        self::assertNull($strategy->extract('some value'));
+        self::assertNull($strategy->hydrate('some value'));
     }
 
-    public function testHydrate(): void
+    public function testCustomValue(): void
     {
-        $strategy = new RefreshStrategy();
-        self::assertNull($strategy->hydrate('some value', null));
+        $strategy = new RefreshStrategy('foo');
+        self::assertSame('foo', $strategy->extract('some value'));
+        self::assertSame('foo', $strategy->hydrate('some value'));
     }
 }

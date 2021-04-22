@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace spaceonfire\LaminasHydratorBridge\Strategy;
+namespace spaceonfire\Bridge\LaminasHydrator\Strategy;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 class BooleanStrategyTest extends TestCase
@@ -37,7 +36,7 @@ class BooleanStrategyTest extends TestCase
     public function testExtractInvalid(): void
     {
         $strategy = new BooleanStrategy(1, 0);
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $strategy->extract(1);
     }
 
@@ -49,7 +48,7 @@ class BooleanStrategyTest extends TestCase
      */
     public function testHydrate(BooleanStrategy $strategy, $input, $output): void
     {
-        self::assertSame($output, $strategy->hydrate($input, null));
+        self::assertSame($output, $strategy->hydrate($input));
     }
 
     public function hydrateDataProvider(): array
@@ -88,7 +87,7 @@ class BooleanStrategyTest extends TestCase
      */
     public function testConstructInvalid($trueValue, $falseValue, bool $strict = true): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         new BooleanStrategy($trueValue, $falseValue, $strict);
     }
 

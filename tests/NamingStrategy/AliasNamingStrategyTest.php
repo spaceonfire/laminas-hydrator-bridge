@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace spaceonfire\LaminasHydratorBridge\NamingStrategy;
+namespace spaceonfire\Bridge\LaminasHydrator\NamingStrategy;
 
 use PHPUnit\Framework\TestCase;
 
@@ -32,8 +32,7 @@ class AliasNamingStrategyTest extends TestCase
     {
         $strategy = new AliasNamingStrategy();
         $strategy->addAlias('verbosityLevelMap', 'verbosity_level_map');
-        $strategy->addAlias('verbosityLevelMap', 'verbosity_level_map');
-        $this->expectNotice();
+        self::assertSame('verbosityLevelMap', $strategy->hydrate('verbosity_level_map'));
         $strategy->addAlias('overriddenName', 'verbosity_level_map');
         self::assertSame('overriddenName', $strategy->hydrate('verbosity_level_map'));
     }

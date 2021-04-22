@@ -2,26 +2,15 @@
 
 declare(strict_types=1);
 
-namespace spaceonfire\LaminasHydratorBridge;
+namespace spaceonfire\Bridge\LaminasHydrator;
 
 use Laminas\Hydrator\AbstractHydrator;
 
-/**
- * Class StdClassHydrator.
- *
- * Attention: You should not extend this class because it will become final in the next major release
- * after the backward compatibility aliases are removed.
- *
- * @final
- */
-class StdClassHydrator extends AbstractHydrator
+final class StdClassHydrator extends AbstractHydrator
 {
-    /**
-     * @inheritDoc
-     */
     public function extract(object $object): array
     {
-        $data = get_object_vars($object);
+        $data = \get_object_vars($object);
         $filter = $this->getFilter();
 
         /**
@@ -49,10 +38,7 @@ class StdClassHydrator extends AbstractHydrator
         return $data;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function hydrate(array $data, object $object)
+    public function hydrate(array $data, object $object): object
     {
         foreach ($data as $name => $value) {
             $property = $this->hydrateName($name, $data);

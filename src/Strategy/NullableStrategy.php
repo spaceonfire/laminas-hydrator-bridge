@@ -2,49 +2,28 @@
 
 declare(strict_types=1);
 
-namespace spaceonfire\LaminasHydratorBridge\Strategy;
+namespace spaceonfire\Bridge\LaminasHydrator\Strategy;
 
 use Laminas\Hydrator\Strategy\StrategyInterface;
 
-/**
- * Class NullableStrategy
- *
- * Attention: You should not extend this class because it will become final in the next major release
- * after the backward compatibility aliases are removed.
- *
- * @final
- */
-class NullableStrategy implements StrategyInterface
+final class NullableStrategy implements StrategyInterface
 {
-    /**
-     * @var StrategyInterface
-     */
-    private $strategy;
+    private StrategyInterface $strategy;
 
     /**
-     * @var callable
+     * @var callable(mixed):bool
      */
     private $nullValuePredicate;
 
     /**
      * NullableStrategy constructor.
      * @param StrategyInterface $strategy
-     * @param callable|null $nullValuePredicate
+     * @param null|callable(mixed):bool $nullValuePredicate
      */
     public function __construct(StrategyInterface $strategy, ?callable $nullValuePredicate = null)
     {
         $this->strategy = $strategy;
-        $this->nullValuePredicate = $nullValuePredicate ?? [$this, 'defaultNullValuePredicate'];
-    }
-
-    /**
-     * Default null value predicate
-     * @param mixed $value
-     * @return bool
-     */
-    public function defaultNullValuePredicate($value): bool
-    {
-        return null === $value;
+        $this->nullValuePredicate = $nullValuePredicate ?? static fn ($value) => null === $value;
     }
 
     /**
@@ -61,6 +40,7 @@ class NullableStrategy implements StrategyInterface
 
     /**
      * @inheritDoc
+     * @param array<string,mixed>|null $data
      */
     public function hydrate($value, ?array $data = null)
     {

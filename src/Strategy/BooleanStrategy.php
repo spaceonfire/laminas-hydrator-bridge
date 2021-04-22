@@ -2,58 +2,42 @@
 
 declare(strict_types=1);
 
-namespace spaceonfire\LaminasHydratorBridge\Strategy;
+namespace spaceonfire\Bridge\LaminasHydrator\Strategy;
 
-use InvalidArgumentException;
 use Laminas\Hydrator\Strategy\StrategyInterface;
 
-/**
- * Class BooleanStrategy.
- *
- * Attention: You should not extend this class because it will become final in the next major release
- * after the backward compatibility aliases are removed.
- *
- * @final
- */
-class BooleanStrategy implements StrategyInterface
+final class BooleanStrategy implements StrategyInterface
 {
     /**
      * @var array<int|string>
      */
-    private $trueValue;
+    private array $trueValue;
 
     /**
      * @var array<int|string>
      */
-    private $falseValue;
+    private array $falseValue;
+
+    private bool $strict;
 
     /**
-     * @var bool
-     */
-    private $strict;
-
-    /**
-     * BooleanStrategy constructor.
-     * @param int|string|mixed $trueValue
-     * @param int|string|mixed $falseValue
+     * @param int|string|array<int|string> $trueValue
+     * @param int|string|array<int|string> $falseValue
      * @param bool $strict
      */
     public function __construct($trueValue, $falseValue, bool $strict = true)
     {
-        $this->trueValue = $this->prepareInputValue($trueValue, '$trueValue');
-        $this->falseValue = $this->prepareInputValue($falseValue, '$falseValue');
+        $this->trueValue = self::prepareInputValue($trueValue, '$trueValue');
+        $this->falseValue = self::prepareInputValue($falseValue, '$falseValue');
         $this->strict = $strict;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function extract($value, ?object $object = null)
     {
-        if (!is_bool($value)) {
-            throw new InvalidArgumentException(sprintf(
+        if (!\is_bool($value)) {
+            throw new \InvalidArgumentException(\sprintf(
                 'Unable to extract. Expected a boolean. Got: %s.',
-                is_object($value) ? get_class($value) : gettype($value)
+                \get_debug_type($value)
             ));
         }
 
@@ -62,10 +46,11 @@ class BooleanStrategy implements StrategyInterface
 
     /**
      * @inheritDoc
+     * @param array<string,mixed>|null $data
      */
-    public function hydrate($value, ?array $data = null)
+    public function hydrate($value, ?array $data = null): bool
     {
-        if (is_bool($value)) {
+        if (\is_bool($value)) {
             return $value;
         }
 
@@ -84,24 +69,24 @@ class BooleanStrategy implements StrategyInterface
      * @param string $argument
      * @return array<int|string>
      */
-    private function prepareInputValue($inputValue, string $argument): array
+    private static function prepareInputValue($inputValue, string $argument): array
     {
         $result = [];
 
-        foreach (is_iterable($inputValue) ? $inputValue : [$inputValue] as $value) {
-            if (!is_int($value) && !is_string($value)) {
-                throw new InvalidArgumentException(sprintf(
-                    'Argument %s expected to be int, string or iterable or int or string. Got: %s',
+        foreach (\is_iterable($inputValue) ? $inputValue : [$inputValue] as $value) {
+            if (!\is_int($value) && !\is_string($value)) {
+                throw new \InvalidArgumentException(\sprintf(
+                    'Argument %s expected to be int, string or iterator of int or string. Got: %s',
                     $argument,
-                    is_object($value) ? get_class($value) : gettype($value)
+                    \is_object($value) ? \get_class($value) : \gettype($value)
                 ));
             }
 
             $result[] = $value;
         }
 
-        if (0 === count($result)) {
-            throw new InvalidArgumentException(sprintf('Argument %s cannot be empty iterable', $argument));
+        if (0 === \count($result)) {
+            throw new \InvalidArgumentException(\sprintf('Argument %s cannot be empty iterable', $argument));
         }
 
         return $result;
